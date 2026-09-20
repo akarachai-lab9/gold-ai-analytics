@@ -499,18 +499,36 @@ with tabs[3]:
         </div>
         """,unsafe_allow_html=True)
         st.write("")
+        # Prompt presets use session_state so the selected prompt is visibly
+        # inserted into the text area before the user sends it to Gemini.
+        if "market_question" not in st.session_state:
+            st.session_state["market_question"] = ""
+
+        def set_market_question(prompt):
+            st.session_state["market_question"] = prompt
+
         question=st.text_area(
             "Question",
+            key="market_question",
             placeholder="เช่น วิเคราะห์แนวโน้มของราคาทอง โดยพิจารณา Return, Volatility, MA7 และ MA30",
             height=130,label_visibility="collapsed"
         )
         q1,q2,q3=st.columns(3)
-        if q1.button("Trend",use_container_width=True):
-            question="วิเคราะห์แนวโน้มราคาทองจาก Period Return, MA7 และ MA30"
-        if q2.button("Volatility",use_container_width=True):
-            question="วิเคราะห์ความผันผวนจาก Daily Return และ Daily Volatility"
-        if q3.button("Full summary",use_container_width=True):
-            question="สรุปภาพรวมของราคาทองจากสถิติทั้งหมดที่มี"
+        q1.button(
+            "Trend", use_container_width=True,
+            on_click=set_market_question,
+            args=("วิเคราะห์แนวโน้มราคาทอง XAU/USD ในช่วงเวลาที่เลือก โดยพิจารณา Period Return, MA7 และ MA30 พร้อมอธิบายแนวโน้มระยะสั้นและระยะกลาง",)
+        )
+        q2.button(
+            "Volatility", use_container_width=True,
+            on_click=set_market_question,
+            args=("วิเคราะห์ความผันผวนของราคาทอง XAU/USD ในช่วงเวลาที่เลือก โดยพิจารณา Daily Return และ Daily Volatility พร้อมอธิบายว่าความผันผวนอยู่ในลักษณะใด",)
+        )
+        q3.button(
+            "Full summary", use_container_width=True,
+            on_click=set_market_question,
+            args=("สรุปภาพรวมราคาทอง XAU/USD ในช่วงเวลาที่เลือกจากสถิติทั้งหมดที่มี ได้แก่ ราคาปัจจุบัน Period Return, Daily Volatility, MA7 และ MA30 พร้อมสรุปประเด็นสำคัญที่ควรสังเกต",)
+        )
         if st.button("Analyze market",type="primary",use_container_width=True):
             if not question.strip():
                 st.warning("กรุณาระบุคำถาม")
