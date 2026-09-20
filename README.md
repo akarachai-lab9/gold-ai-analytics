@@ -22,3 +22,15 @@ The generated gold background remains bundled in `assets/gold-background.png`.
 
 ## V9.1
 Fixed CSS stacking so the dark overlay affects only the generated gold background, not text, cards, tabs, or charts.
+
+## V10 — Firebase Authentication
+Adds Email/Password Register, Login and Logout using Firebase Authentication REST API.
+
+Streamlit Secrets / local `.env`:
+
+FIREBASE_API_KEY="..."
+GOLDPRICE_API_KEY="..."   # optional
+GEMINI_API_KEY="..."
+GEMINI_MODEL="gemini-3.6-flash"
+
+Firebase Console must have Authentication > Sign-in method > Email/Password enabled.
